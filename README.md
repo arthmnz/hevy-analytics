@@ -2,6 +2,8 @@
 
 Dashboard de análise de dados de treino, construído a partir do histórico exportado do app [Hevy](https://www.hevyapp.com/). Projeto criado com foco em aprendizado prático de análise de dados e desenvolvimento backend.
 
+![Dashboard Hevy Analytics](screenshots/dashboard.png)
+
 ## Funcionalidades
 
 - Limpeza e tratamento de dados exportados em CSV (incluindo conversão de datas em português)

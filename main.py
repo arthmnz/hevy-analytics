@@ -1,5 +1,4 @@
 import pandas as pd
-import re
 import streamlit as st
 import plotly.express as px
 
@@ -33,15 +32,19 @@ df_treino["weight_kg"] = df_treino["weight_kg"].fillna(0)
 df_treino["volume"] = df_treino["weight_kg"] * df_treino["reps"]
 
 volume_por_treino = df_treino.groupby(["title", "start_time"])["volume"].sum().reset_index()
-
 volume_por_treino = volume_por_treino.sort_values("start_time")
 
 evolucao_carga = df_treino.groupby(["exercise_title", "start_time"])["weight_kg"].max().reset_index()
-
 evolucao_carga = evolucao_carga.sort_values(["exercise_title", "start_time"])
 
-print(volume_por_treino.head(10))
-print(evolucao_carga.head(15))
+volume_por_treino["semana"] = volume_por_treino["start_time"].dt.to_period("W").astype(str)
+volume_por_treino["mes"] = volume_por_treino["start_time"].dt.to_period("M").astype(str)
+
+treinos_por_semana = volume_por_treino.groupby("semana")["title"].count().reset_index()
+treinos_por_semana.columns = ["semana", "quantidade_treinos"]
+
+treinos_por_mes = volume_por_treino.groupby("mes")["title"].count().reset_index()
+treinos_por_mes.columns = ["mes", "quantidade_treinos"]
 
 st.title("Hevy Analytics")
 
@@ -72,10 +75,32 @@ fig_carga = px.line(
     markers=True,
 )
 
+fig_semana = px.bar(
+    treinos_por_semana,
+    x="semana",
+    y="quantidade_treinos",
+    title="Treinos por semana",
+)
+
+fig_mes = px.bar(
+    treinos_por_mes,
+    x="mes",
+    y="quantidade_treinos",
+    title="Treinos por mês",
+)
+
 col1, col2 = st.columns(2, gap="xlarge")
 
 with col1:
     st.plotly_chart(fig_volume)
-
 with col2:
     st.plotly_chart(fig_carga)
+
+st.subheader("Frequência de treino")
+
+col3, col4 = st.columns(2, gap="xlarge")
+
+with col3:
+    st.plotly_chart(fig_semana)
+with col4:
+    st.plotly_chart(fig_mes)
