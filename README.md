@@ -21,7 +21,7 @@ Dashboard de análise de dados de treino, construído a partir do histórico exp
 ## Como rodar o projeto
 
 \`\`\`bash
-git clone https://github.com/SEU-USUARIO/hevy-analytics.git
+git clone https://github.com/arthmnz/hevy-analytics.git
 cd hevy-analytics
 python -m venv venv
 venv\Scripts\activate
